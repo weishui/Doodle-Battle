@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour
 {
     public const string Selected = "InputManager.Selected";
+    public const string GoTo = "InputManager.GoTo";
 
     [SerializeField]
     private float cameraPanSpeed;
@@ -20,6 +21,7 @@ public class InputManager : MonoBehaviour
         inputMaster = new InputMaster();
         inputMaster.Player.Move.performed += ctx => { movementInput = ctx.ReadValue<Vector2>(); Debug.Log("moving"); };
         inputMaster.Player.Select.performed += ctx => OnLeftClick(ctx);
+        inputMaster.UI.RightClick.performed += ctx => OnRightClick(ctx);
     }
 
     // Update is called once per frame
@@ -37,6 +39,19 @@ public class InputManager : MonoBehaviour
         {
             Debug.Log("Hit: " + hit.collider.ToString());
             this.PostNotification(Selected, hit.collider.gameObject);
+        }
+
+    }
+
+    void OnRightClick(InputAction.CallbackContext ctx)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 100))
+        {
+            Debug.Log("Go to: " + hit.collider.ToString());
+            this.PostNotification(GoTo, hit.point);
         }
 
     }
