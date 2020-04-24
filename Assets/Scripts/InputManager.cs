@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
+    public const string Selected = "InputManager.Selected";
+
     [SerializeField]
     private float cameraPanSpeed;
 
@@ -33,6 +36,7 @@ public class InputManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 100))
         {
             Debug.Log("Hit: " + hit.collider.ToString());
+            this.PostNotification(Selected, hit.collider.gameObject);
         }
 
     }
