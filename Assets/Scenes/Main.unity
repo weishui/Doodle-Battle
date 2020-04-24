@@ -231,7 +231,11 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< Updated upstream:Assets/Scenes/SampleScene.unity
 --- !u!114 &589676745
+=======
+--- !u!114 &241779931
+>>>>>>> Stashed changes:Assets/Scenes/Main.unity
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
