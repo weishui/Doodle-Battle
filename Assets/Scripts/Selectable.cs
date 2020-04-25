@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,10 +9,23 @@ public class Selectable : MonoBehaviour
     [SerializeField]
     private GameObject selectionIndicator;
     private NavMeshAgent navMeshAgent;
-    private bool IsSelected 
+
+    [System.Obsolete("Should put this to private after debugging")]
+    public bool IsSelected 
     { 
         get { return selectionIndicator.activeSelf; } 
-        set { selectionIndicator.SetActive(value); } 
+        set 
+        { 
+            selectionIndicator.SetActive(value); 
+            if (value)
+            {
+                this.AddObserver(GoTo, InputManager.GoTo);
+            }
+            else
+            {
+                this.RemoveObserver(GoTo, InputManager.GoTo);
+            }
+        } 
     }
 
     private void Start()
@@ -23,50 +37,29 @@ public class Selectable : MonoBehaviour
     private void OnEnable()
     {
         this.AddObserver(OnSelected, InputManager.Selected);
-
     }
 
     private void OnDisable()
     {
         this.RemoveObserver(OnSelected, InputManager.Selected);
-
-
     }
 
     void OnSelected(object sender, object args)
     {
-        if(gameObject == args as GameObject)
+        GameObject[] selectedObjects = (GameObject[])args;
+        if (selectedObjects.Contains(gameObject) && !IsSelected)
         {
-            if (!IsSelected)
-            {
-                Debug.Log(gameObject.name + " is selected.");
-                IsSelected = true;
-                this.AddObserver(GoTo, InputManager.GoTo);
-            }
+            IsSelected = true;
+            Debug.Log(transform.name + " is selected");
         }
-        else
-        {          
-            if (IsSelected)
-            {
-                Debug.Log(gameObject.name + " is deselected");
-                IsSelected = false;
-                this.RemoveObserver(GoTo, InputManager.GoTo);
-            }
-        }        
+        else if (IsSelected)
+            IsSelected = false;        
     }
 
     void GoTo(object sender, object args)
     {
-        if (IsSelected)
-        {
-            Vector3 dest = (Vector3)args;
-            Debug.Log(gameObject.name + "Going to " + args);
-            navMeshAgent.destination = dest;
-        }
-        else
-        {
-            //Debug.Log(gameObject.name + " is not selected but observing the GoTo note");
-        }
+        //if (IsSelected)
+            navMeshAgent.destination = (Vector3)args;
     }
 
 }

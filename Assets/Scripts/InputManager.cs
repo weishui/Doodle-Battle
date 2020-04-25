@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,6 +8,7 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour
 {
     public const string Selected = "InputManager.Selected";
+    public const string BoxSelected = "InputManager.BoxSelected";
     public const string GoTo = "InputManager.GoTo";
 
     [SerializeField]
@@ -15,11 +17,21 @@ public class InputManager : MonoBehaviour
     public InputMaster inputMaster;
     Vector2 movementInput;
 
+    #region SelectBox
+    private bool isDragging;
+    private Vector2 boxStart;
+
+    private Rect selectBox;
+    public Texture boxTex;
+
+    private GameObject[] units;
+    #endregion
+
     // Start is called before the first frame update
     void Awake()
     {
         inputMaster = new InputMaster();
-        inputMaster.Player.Move.performed += ctx => { movementInput = ctx.ReadValue<Vector2>(); Debug.Log("moving"); };
+        inputMaster.Player.Move.performed += ctx => { movementInput = ctx.ReadValue<Vector2>(); };
         inputMaster.Player.Select.performed += ctx => OnLeftClick(ctx);
         inputMaster.UI.RightClick.performed += ctx => OnRightClick(ctx);
     }
@@ -28,6 +40,24 @@ public class InputManager : MonoBehaviour
     void Update()
     {
         MoveCamera();
+        Vector2 boxEnd = Mouse.current.position.ReadValue();
+
+        if (Input.GetMouseButtonUp(0) && isDragging)
+        {
+            OnDragSelection();
+            isDragging = false;
+        }
+
+        selectBox = new Rect(boxStart.x, Screen.height - boxStart.y, boxEnd.x - boxStart.x, boxStart.y - boxEnd.y);
+    }
+
+    void OnDragSelection()
+    {
+        units = GameObject.FindGameObjectsWithTag("Unit");
+        GameObject[] selectedUnits = units.Where(u => IsWithinSelectionBounds(u.transform)).ToArray();
+
+        this.PostNotification(Selected, selectedUnits);
+
     }
 
     void OnLeftClick(InputAction.CallbackContext ctx)
@@ -37,8 +67,16 @@ public class InputManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            //Debug.Log("Hit: " + hit.collider.ToString());
-            this.PostNotification(Selected, hit.collider.gameObject);
+            if (hit.transform.CompareTag("Unit"))
+            {
+                this.PostNotification(Selected, new GameObject[] { hit.collider.gameObject });
+            }
+            else
+            {
+                isDragging = true;
+                boxStart = Mouse.current.position.ReadValue();
+                Debug.Log("Dragging");
+            }
         }
 
     }
@@ -50,7 +88,6 @@ public class InputManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            //Debug.Log("Go to: " + hit.collider.ToString());
             this.PostNotification(GoTo, hit.point);
         }
 
@@ -59,6 +96,19 @@ public class InputManager : MonoBehaviour
     private void MoveCamera()
     {
         Camera.main.transform.Translate(movementInput * cameraPanSpeed * Time.deltaTime);
+    }
+
+    private bool IsWithinSelectionBounds(Transform transform)
+    {
+        var camera = Camera.main;
+        Bounds viewportBounds = ScreenHelper.GetViewportBounds(Camera.main, boxStart, Input.mousePosition);
+        return viewportBounds.Contains(camera.WorldToViewportPoint(transform.position));
+    }
+
+    private void OnGUI()
+    {
+        if (isDragging)
+            GUI.DrawTexture(selectBox, boxTex);
     }
 
     private void OnEnable()
