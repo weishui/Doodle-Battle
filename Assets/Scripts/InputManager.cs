@@ -6,59 +6,49 @@ using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
-    public const string Selected = "InputManager.Selected";
-    public const string BoxSelected = "InputManager.BoxSelected";
-    public const string GoTo = "InputManager.GoTo";
-
+    #region properties
+    public InputMaster inputMaster;
+    #region Camera
     [SerializeField]
     private float cameraPanSpeed;
-
-    public InputMaster inputMaster;
     Vector2 movementInput;
+    #endregion
 
     #region SelectBox
     private bool isDragging;
-    private Vector2 boxStart;
-
-    private Rect selectBox;
-    public Texture boxTex;
-
-    private GameObject[] units;
+    private Vector2 dragStartPos;
     #endregion
 
-    // Start is called before the first frame update
+    #region Define Notifications
+    public const string Selected = "InputManager.Selected";
+    public const string BoxSelected = "InputManager.BoxSelected";
+    public const string GoTo = "InputManager.GoTo";
+    #endregion
+    #endregion
+
+    #region MonoBehaviour
     void Awake()
     {
         inputMaster = new InputMaster();
         inputMaster.Player.Move.performed += ctx => { movementInput = ctx.ReadValue<Vector2>(); };
         inputMaster.Player.Select.performed += ctx => OnLeftClick(ctx);
+        inputMaster.Player.Select.canceled += ctx => OnLeftButtonUp(ctx);
         inputMaster.UI.RightClick.performed += ctx => OnRightClick(ctx);
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         MoveCamera();
-        Vector2 boxEnd = Mouse.current.position.ReadValue();
-
-        if (Input.GetMouseButtonUp(0) && isDragging)
-        {
-            OnDragSelection();
-            isDragging = false;
-        }
-
-        selectBox = new Rect(boxStart.x, Screen.height - boxStart.y, boxEnd.x - boxStart.x, boxStart.y - boxEnd.y);
     }
 
-    void OnDragSelection()
+    private void OnGUI()
     {
-        units = GameObject.FindGameObjectsWithTag("Unit");
-        GameObject[] selectedUnits = units.Where(u => IsWithinSelectionBounds(u.transform)).ToArray();
-
-        this.PostNotification(Selected, selectedUnits);
-
+        DrawSelectBox();
     }
+    #endregion
 
+    #region Notification Posters
     void OnLeftClick(InputAction.CallbackContext ctx)
     {
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
@@ -73,47 +63,64 @@ public class InputManager : MonoBehaviour
             else
             {
                 isDragging = true;
-                boxStart = Mouse.current.position.ReadValue();
-                Debug.Log("Dragging");
+                dragStartPos = Mouse.current.position.ReadValue();
             }
         }
-
     }
 
+    /// <summary>
+    /// Select objects when a drag is done
+    /// </summary>
+    /// <param name="ctx"></param>
+    void OnLeftButtonUp(InputAction.CallbackContext ctx)
+    {
+        if (isDragging)
+        {
+            Vector2 boxEnd = Mouse.current.position.ReadValue();
+
+            bool IsWithinSelectionBounds(Transform transform)
+            {
+                Bounds viewportBounds = ScreenHelper.GetViewportBounds(Camera.main, dragStartPos, Input.mousePosition);
+                return viewportBounds.Contains(Camera.main.WorldToViewportPoint(transform.position));
+            }
+
+            GameObject[] units = GameObject.FindGameObjectsWithTag("Unit");
+            GameObject[] selectedUnits = units.Where(u => IsWithinSelectionBounds(u.transform)).ToArray();
+            this.PostNotification(Selected, selectedUnits);
+            isDragging = false;
+        }
+    }
+
+    /// <summary>
+    /// Order goto
+    /// </summary>
+    /// <param name="ctx"></param>
     void OnRightClick(InputAction.CallbackContext ctx)
     {
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, 100))
-        {
             this.PostNotification(GoTo, hit.point);
-        }
-
     }
+    #endregion
 
+    #region MonoBehaviour related
     private void MoveCamera()
     {
         Camera.main.transform.Translate(movementInput * cameraPanSpeed * Time.deltaTime);
     }
 
-    private bool IsWithinSelectionBounds(Transform transform)
+    private void DrawSelectBox()
     {
-        var camera = Camera.main;
-        Bounds viewportBounds = ScreenHelper.GetViewportBounds(Camera.main, boxStart, Input.mousePosition);
-        return viewportBounds.Contains(camera.WorldToViewportPoint(transform.position));
-    }
+        Vector2 boxEnd = Mouse.current.position.ReadValue();
 
-    private void OnGUI()
-    {
         if (isDragging)
-        {
-            //GUI.DrawTexture(selectBox, boxTex);
-            ScreenHelper.DrawScreenRectBorder(selectBox, 1f, Color.green);
-        }
-
+            ScreenHelper.DrawScreenRectBorder(new Rect(dragStartPos.x, Screen.height - dragStartPos.y, boxEnd.x - dragStartPos.x, dragStartPos.y - boxEnd.y), 1f, Color.green);
     }
+    #endregion
 
+    #region OnEnable & OnDisable
     private void OnEnable()
     {
         inputMaster.Enable();
@@ -123,4 +130,5 @@ public class InputManager : MonoBehaviour
     {
         inputMaster.Disable();
     }
+    #endregion
 }

@@ -188,6 +188,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Miner (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 8981710353225049658, guid: 30cff5ec21944dc45a905bdff48d478c,
+        type: 3}
+      propertyPath: m_TagString
+      value: Unit
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30cff5ec21944dc45a905bdff48d478c, type: 3}
 --- !u!1001 &530196419
@@ -256,6 +261,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Miner (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981710353225049658, guid: 30cff5ec21944dc45a905bdff48d478c,
+        type: 3}
+      propertyPath: m_TagString
+      value: Unit
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30cff5ec21944dc45a905bdff48d478c, type: 3}
@@ -428,6 +438,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraPanSpeed: 30
+  boxTex: {fileID: 2800000, guid: 32ceacfa28dd781498dc079ee28cffea, type: 3}
 --- !u!4 &589676746
 Transform:
   m_ObjectHideFlags: 0
@@ -797,6 +808,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Miner (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8981710353225049658, guid: 30cff5ec21944dc45a905bdff48d478c,
+        type: 3}
+      propertyPath: m_TagString
+      value: Unit
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30cff5ec21944dc45a905bdff48d478c, type: 3}
 --- !u!1001 &1414337144
@@ -866,6 +882,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Miner (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 8981710353225049658, guid: 30cff5ec21944dc45a905bdff48d478c,
+        type: 3}
+      propertyPath: m_TagString
+      value: Unit
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30cff5ec21944dc45a905bdff48d478c, type: 3}
 --- !u!1001 &1425792583
@@ -934,6 +955,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Miner (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981710353225049658, guid: 30cff5ec21944dc45a905bdff48d478c,
+        type: 3}
+      propertyPath: m_TagString
+      value: Unit
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30cff5ec21944dc45a905bdff48d478c, type: 3}

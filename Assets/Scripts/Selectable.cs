@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public class Selectable : MonoBehaviour
 {
+    #region properties
     [SerializeField]
     private GameObject selectionIndicator;
     private NavMeshAgent navMeshAgent;
@@ -17,32 +18,22 @@ public class Selectable : MonoBehaviour
         { 
             selectionIndicator.SetActive(value); 
             if (value)
-            {
                 this.AddObserver(GoTo, InputManager.GoTo);
-            }
             else
-            {
                 this.RemoveObserver(GoTo, InputManager.GoTo);
-            }
         } 
     }
+    #endregion
 
+    #region MonoBehaviour
     private void Start()
     {
         IsSelected = false;
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
+    #endregion
 
-    private void OnEnable()
-    {
-        this.AddObserver(OnSelected, InputManager.Selected);
-    }
-
-    private void OnDisable()
-    {
-        this.RemoveObserver(OnSelected, InputManager.Selected);
-    }
-
+    #region Handlers
     void OnSelected(object sender, object args)
     {
         GameObject[] selectedObjects = (GameObject[])args;
@@ -60,5 +51,18 @@ public class Selectable : MonoBehaviour
         //if (IsSelected)
             navMeshAgent.destination = (Vector3)args;
     }
+    #endregion
+
+    #region OnEnable & OnDisable
+    private void OnEnable()
+    {
+        this.AddObserver(OnSelected, InputManager.Selected);
+    }
+
+    private void OnDisable()
+    {
+        this.RemoveObserver(OnSelected, InputManager.Selected);
+    }
+    #endregion
 
 }
