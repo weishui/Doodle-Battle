@@ -10,8 +10,7 @@ public class Selectable : MonoBehaviour
     private GameObject selectionIndicator;
     private NavMeshAgent navMeshAgent;
 
-    [System.Obsolete("Should put this to private after debugging")]
-    public bool IsSelected 
+    private bool IsSelected 
     { 
         get { return selectionIndicator.activeSelf; } 
         set 
@@ -47,12 +46,12 @@ public class Selectable : MonoBehaviour
     void OnSelected(object sender, object args)
     {
         GameObject[] selectedObjects = (GameObject[])args;
-        if (selectedObjects.Contains(gameObject) && !IsSelected)
+        if (selectedObjects.Contains(gameObject))
         {
             IsSelected = true;
             Debug.Log(transform.name + " is selected");
         }
-        else if (IsSelected)
+        else
             IsSelected = false;        
     }
 

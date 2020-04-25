@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
+using KevinFeng;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -108,7 +107,11 @@ public class InputManager : MonoBehaviour
     private void OnGUI()
     {
         if (isDragging)
-            GUI.DrawTexture(selectBox, boxTex);
+        {
+            //GUI.DrawTexture(selectBox, boxTex);
+            ScreenHelper.DrawScreenRectBorder(selectBox, 1f, Color.green);
+        }
+
     }
 
     private void OnEnable()
