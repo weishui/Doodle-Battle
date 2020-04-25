@@ -96,8 +96,10 @@ public class NotificationCenter
 
         // No need to take action if we don't monitor this notification
         if (!_table.ContainsKey(notificationName))
+        {
+            Debug.Log("notification name not found");
             return;
-
+        }
         SenderTable subTable = _table[notificationName];
         System.Object key = (sender != null) ? sender : this;
 

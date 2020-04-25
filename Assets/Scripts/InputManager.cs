@@ -37,7 +37,7 @@ public class InputManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            Debug.Log("Hit: " + hit.collider.ToString());
+            //Debug.Log("Hit: " + hit.collider.ToString());
             this.PostNotification(Selected, hit.collider.gameObject);
         }
 
@@ -50,7 +50,7 @@ public class InputManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            Debug.Log("Go to: " + hit.collider.ToString());
+            //Debug.Log("Go to: " + hit.collider.ToString());
             this.PostNotification(GoTo, hit.point);
         }
 
