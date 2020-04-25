@@ -27,11 +27,11 @@ public static class NotificationExtensions
     
     public static void RemoveObserver(this object obj, Handler handler, string notificationName)
     {
-        NotificationCenter.instance.AddObserver(handler, notificationName);
+        NotificationCenter.instance.RemoveObserver(handler, notificationName);
     }
     
     public static void RemoveObserver(this object obj, Handler handler, string notificationName, System.Object sender)
     {
-        NotificationCenter.instance.AddObserver(handler, notificationName, sender);
+        NotificationCenter.instance.RemoveObserver(handler, notificationName, sender);
     }
 }
