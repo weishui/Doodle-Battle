@@ -9,7 +9,9 @@ using UnityEngine.EventSystems;
 public class InputManager : MonoBehaviour
 {
     #region properties
+
     public InputMaster inputMaster;
+
     #region Camera
     [SerializeField]
     private float cameraPanSpeed;
@@ -17,15 +19,13 @@ public class InputManager : MonoBehaviour
     #endregion
 
     #region Selection
-    private List<GameObject> selectedUnits;
+    private List<GameObject> selectedObjects;
     private bool isDragging;
     private Vector2 dragStartPos;
+    [SerializeField]
+    private Texture boxTex;
     #endregion
 
-    #region Define Notifications
-    public const string Selected = "InputManager.Selected";
-    public const string GoTo = "InputManager.GoTo";
-    #endregion
     #endregion
 
     #region MonoBehaviour
@@ -58,10 +58,10 @@ public class InputManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            if (hit.transform.CompareTag("Unit"))
+            if (hit.transform.CompareTag("Unit") || hit.transform.CompareTag("Building"))
             {
                 DeselectAllInList();
-                selectedUnits = new List<GameObject> { hit.collider.gameObject };
+                selectedObjects = new List<GameObject> { hit.collider.gameObject };
                 SelectAllInList();
             }
             else
@@ -78,9 +78,14 @@ public class InputManager : MonoBehaviour
         {
             DeselectAllInList();
             GameObject[] units = GameObject.FindGameObjectsWithTag("Unit");
+            GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
             units = units.Where(u => IsWithinSelectionBounds(u.transform)).ToArray();
+            buildings = buildings.Where(u => IsWithinSelectionBounds(u.transform)).ToArray();
+
             if (units.Length > 0)
-                selectedUnits = units.Where(u => IsWithinSelectionBounds(u.transform)).ToList();
+                selectedObjects = units.ToList();
+            else
+                selectedObjects = buildings.ToList();
             SelectAllInList();
             isDragging = false;
         }
@@ -92,23 +97,23 @@ public class InputManager : MonoBehaviour
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, 100))
-            foreach (var item in selectedUnits)
-                ExecuteEvents.Execute<IMoveHandler>(item, null, (x, y) => x.OnDestination(hit.point));
+            foreach (GameObject o in selectedObjects)
+                ExecuteEvents.Execute<IMoveEventHandler>(o, null, (x, y) => x.OnDestination(hit.point));
     }
 
     #region helpers
     void DeselectAllInList()
     {
-        if (selectedUnits != null)
-            foreach (var item in selectedUnits)
-                ExecuteEvents.Execute<ISelectHandler>(item, null, (x, y) => x.OnSelected(false));
+        if (selectedObjects != null)
+            foreach (var item in selectedObjects)
+                ExecuteEvents.Execute<ISelectEventHandler>(item, null, (x, y) => x.SwitchSelected(false));
     }
 
     void SelectAllInList()
     {
-        if (selectedUnits != null)
-            foreach (var item in selectedUnits)
-                ExecuteEvents.Execute<ISelectHandler>(item, null, (x, y) => x.OnSelected(true));
+        if (selectedObjects != null)
+            foreach (var item in selectedObjects)
+                ExecuteEvents.Execute<ISelectEventHandler>(item, null, (x, y) => x.SwitchSelected(true));
     }
 
     bool IsWithinSelectionBounds(Transform transform)
@@ -131,7 +136,11 @@ public class InputManager : MonoBehaviour
         Vector2 boxEnd = Mouse.current.position.ReadValue();
 
         if (isDragging)
-            ScreenHelper.DrawScreenRectBorder(new Rect(dragStartPos.x, Screen.height - dragStartPos.y, boxEnd.x - dragStartPos.x, dragStartPos.y - boxEnd.y), 1f, Color.green);
+        {
+            Rect selectBox = new Rect(dragStartPos.x, Screen.height - dragStartPos.y, boxEnd.x - dragStartPos.x, dragStartPos.y - boxEnd.y);
+            ScreenHelper.DrawScreenRectBorder(selectBox, 1f, Color.green);
+            GUI.DrawTexture(selectBox, boxTex);
+        }
     }
     #endregion
 

@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class SelectHandler : MonoBehaviour, ISelectHandler
+public class SelectEventHandler : MonoBehaviour, ISelectEventHandler
 {
     [SerializeField]
     private GameObject selectedIndicator;
@@ -14,7 +14,7 @@ public class SelectHandler : MonoBehaviour, ISelectHandler
         selectedIndicator.SetActive(false);
     }
 
-    public void OnSelected(bool isSelected)
+    public void SwitchSelected(bool isSelected)
     {
         selectedIndicator.SetActive(isSelected);
     }
