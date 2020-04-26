@@ -1,6 +1,6 @@
 ﻿using UnityEngine.EventSystems;
 
-public interface IMoveEventHandler : IEventSystemHandler
+public interface IInteracter : IEventSystemHandler
 {
     void OnDestination(UnityEngine.RaycastHit hit);
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class SelectEventHandler : MonoBehaviour, ISelectEventHandler
+public class Selectable : MonoBehaviour, ISelectable
 {
     [SerializeField]
     private GameObject selectedIndicator;

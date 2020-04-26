@@ -1,6 +1,6 @@
 ﻿using UnityEngine.EventSystems;
 
-public interface ISelectEventHandler : IEventSystemHandler
+public interface ISelectable : IEventSystemHandler
 {
     void SwitchSelected(bool isSelected);
 }

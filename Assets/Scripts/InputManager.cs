@@ -19,7 +19,7 @@ public class InputManager : MonoBehaviour
     #endregion
 
     #region Selection
-    private List<GameObject> selectedObjects;
+    private List<GameObject> selectedObjects = new List<GameObject>();
     private bool isDragging;
     private Vector2 dragStartPos;
     [SerializeField]
@@ -97,8 +97,17 @@ public class InputManager : MonoBehaviour
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, 100))
+        {
+            Debug.Log("Hit: " + hit.collider.ToString());
             foreach (GameObject o in selectedObjects)
-                ExecuteEvents.Execute<IMoveEventHandler>(o, null, (x, y) => x.OnDestination(hit.point));
+            {
+                if (hit.collider.gameObject.GetComponent<IInteractable>() != null && selectedObjects.Count > 0)
+                {
+                    ExecuteEvents.Execute<Interacter>(o, null, (x, y) => x.OnDestination(hit));
+                }
+            }
+        }
+
     }
 
     #region helpers
@@ -106,14 +115,14 @@ public class InputManager : MonoBehaviour
     {
         if (selectedObjects != null)
             foreach (var item in selectedObjects)
-                ExecuteEvents.Execute<ISelectEventHandler>(item, null, (x, y) => x.SwitchSelected(false));
+                ExecuteEvents.Execute<ISelectable>(item, null, (x, y) => x.SwitchSelected(false));
     }
 
     void SelectAllInList()
     {
         if (selectedObjects != null)
             foreach (var item in selectedObjects)
-                ExecuteEvents.Execute<ISelectEventHandler>(item, null, (x, y) => x.SwitchSelected(true));
+                ExecuteEvents.Execute<ISelectable>(item, null, (x, y) => x.SwitchSelected(true));
     }
 
     bool IsWithinSelectionBounds(Transform transform)
