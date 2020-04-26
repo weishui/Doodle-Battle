@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour
 {
@@ -59,8 +60,9 @@ public class InputManager : MonoBehaviour
         {
             if (hit.transform.CompareTag("Unit"))
             {
+                DeselectAllInList();
                 selectedUnits = new List<GameObject> { hit.collider.gameObject };
-                this.PostNotification(Selected, selectedUnits);
+                SelectAllInList();
             }
             else
             {
@@ -70,47 +72,51 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Select objects when a drag is done
-    /// </summary>
-    /// <param name="ctx"></param>
     void OnLeftButtonUp(InputAction.CallbackContext ctx)
     {
         if (isDragging)
         {
-            Vector2 boxEnd = Mouse.current.position.ReadValue();
-
-            bool IsWithinSelectionBounds(Transform transform)
-            {
-                Bounds viewportBounds = ScreenHelper.GetViewportBounds(Camera.main, dragStartPos, Input.mousePosition);
-                return viewportBounds.Contains(Camera.main.WorldToViewportPoint(transform.position));
-            }
-
+            DeselectAllInList();
             GameObject[] units = GameObject.FindGameObjectsWithTag("Unit");
             units = units.Where(u => IsWithinSelectionBounds(u.transform)).ToArray();
             if (units.Length > 0)
                 selectedUnits = units.Where(u => IsWithinSelectionBounds(u.transform)).ToList();
-            this.PostNotification(Selected, selectedUnits);
+            SelectAllInList();
             isDragging = false;
         }
     }
 
-
-    /// <summary>
-    /// Order goto
-    /// </summary>
-    /// <param name="ctx"></param>
     void OnRightClick(InputAction.CallbackContext ctx)
     {
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         RaycastHit hit;
 
-        
-
         if (Physics.Raycast(ray, out hit, 100))
-            this.PostNotification(GoTo, new OnRightClickArgs(selectedUnits, hit.point));
+            foreach (var item in selectedUnits)
+                ExecuteEvents.Execute<IMoveHandler>(item, null, (x, y) => x.OnDestination(hit.point));
     }
 
+    #region helpers
+    void DeselectAllInList()
+    {
+        if (selectedUnits != null)
+            foreach (var item in selectedUnits)
+                ExecuteEvents.Execute<ISelectHandler>(item, null, (x, y) => x.OnSelected(false));
+    }
+
+    void SelectAllInList()
+    {
+        if (selectedUnits != null)
+            foreach (var item in selectedUnits)
+                ExecuteEvents.Execute<ISelectHandler>(item, null, (x, y) => x.OnSelected(true));
+    }
+
+    bool IsWithinSelectionBounds(Transform transform)
+    {
+        Bounds viewportBounds = ScreenHelper.GetViewportBounds(Camera.main, dragStartPos, Input.mousePosition);
+        return viewportBounds.Contains(Camera.main.WorldToViewportPoint(transform.position));
+    }
+    #endregion
 
     #endregion
 
@@ -142,15 +148,3 @@ public class InputManager : MonoBehaviour
     #endregion
 }
 
-
-public class OnRightClickArgs
-{
-    public readonly List<GameObject> units;
-    public readonly Vector3 dest;
-
-    public OnRightClickArgs(List<GameObject> units, Vector3 dest)
-    {
-        this.units = units;
-        this.dest = dest;
-    }
-}

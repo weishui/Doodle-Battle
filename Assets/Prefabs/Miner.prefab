@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e47d96377a5f0479db32c4ac979c01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectionIndicator: {fileID: 8981710354072782130}
+  selectedIndicator: {fileID: 8981710354072782130}
 --- !u!114 &7208473134920936104
 MonoBehaviour:
   m_ObjectHideFlags: 0
