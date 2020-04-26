@@ -3,6 +3,7 @@ using KevinFeng;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public class InputManager : MonoBehaviour
 {
@@ -14,14 +15,14 @@ public class InputManager : MonoBehaviour
     Vector2 movementInput;
     #endregion
 
-    #region SelectBox
+    #region Selection
+    private List<GameObject> selectedUnits;
     private bool isDragging;
     private Vector2 dragStartPos;
     #endregion
 
     #region Define Notifications
     public const string Selected = "InputManager.Selected";
-    public const string BoxSelected = "InputManager.BoxSelected";
     public const string GoTo = "InputManager.GoTo";
     #endregion
     #endregion
@@ -58,7 +59,8 @@ public class InputManager : MonoBehaviour
         {
             if (hit.transform.CompareTag("Unit"))
             {
-                this.PostNotification(Selected, new GameObject[] { hit.collider.gameObject });
+                selectedUnits = new List<GameObject> { hit.collider.gameObject };
+                this.PostNotification(Selected, selectedUnits);
             }
             else
             {
@@ -85,11 +87,14 @@ public class InputManager : MonoBehaviour
             }
 
             GameObject[] units = GameObject.FindGameObjectsWithTag("Unit");
-            GameObject[] selectedUnits = units.Where(u => IsWithinSelectionBounds(u.transform)).ToArray();
+            units = units.Where(u => IsWithinSelectionBounds(u.transform)).ToArray();
+            if (units.Length > 0)
+                selectedUnits = units.Where(u => IsWithinSelectionBounds(u.transform)).ToList();
             this.PostNotification(Selected, selectedUnits);
             isDragging = false;
         }
     }
+
 
     /// <summary>
     /// Order goto
@@ -100,9 +105,13 @@ public class InputManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         RaycastHit hit;
 
+        
+
         if (Physics.Raycast(ray, out hit, 100))
-            this.PostNotification(GoTo, hit.point);
+            this.PostNotification(GoTo, new OnRightClickArgs(selectedUnits, hit.point));
     }
+
+
     #endregion
 
     #region MonoBehaviour related
@@ -131,4 +140,17 @@ public class InputManager : MonoBehaviour
         inputMaster.Disable();
     }
     #endregion
+}
+
+
+public class OnRightClickArgs
+{
+    public readonly List<GameObject> units;
+    public readonly Vector3 dest;
+
+    public OnRightClickArgs(List<GameObject> units, Vector3 dest)
+    {
+        this.units = units;
+        this.dest = dest;
+    }
 }

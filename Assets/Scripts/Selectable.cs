@@ -17,10 +17,10 @@ public class Selectable : MonoBehaviour
         set 
         { 
             selectionIndicator.SetActive(value); 
-            if (value)
+/*            if (value)
                 this.AddObserver(GoTo, InputManager.GoTo);
             else
-                this.RemoveObserver(GoTo, InputManager.GoTo);
+                this.RemoveObserver(GoTo, InputManager.GoTo);*/
         } 
     }
     #endregion
@@ -36,21 +36,17 @@ public class Selectable : MonoBehaviour
     #region Handlers
     void OnSelected(object sender, object args)
     {
-        GameObject[] selectedObjects = (GameObject[])args;
-        if (selectedObjects.Contains(gameObject))
+        List<GameObject> units = (List<GameObject>)args;
+        if (units.Contains(gameObject))
         {
             IsSelected = true;
             Debug.Log(transform.name + " is selected");
         }
         else
-            IsSelected = false;        
+            IsSelected = false;      
     }
 
-    void GoTo(object sender, object args)
-    {
-        //if (IsSelected)
-            navMeshAgent.destination = (Vector3)args;
-    }
+
     #endregion
 
     #region OnEnable & OnDisable
