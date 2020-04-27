@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 6697904920139573421}
   - component: {fileID: 6032355978286529821}
   - component: {fileID: 5598341118140225427}
+  - component: {fileID: 105511745110104586}
+  - component: {fileID: 593432946814603394}
   m_Layer: 0
   m_Name: IMS
   m_TagString: Untagged
@@ -82,6 +84,36 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &105511745110104586
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5629405230477723656}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6161045744562814749, guid: aee8be0cd6ede4e4db6bbadbd5e45a65, type: 3}
+--- !u!208 &593432946814603394
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5629405230477723656}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 6.0480003, y: 13.985001, z: 3.163}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 5.6510005, z: -0.307}
+  m_TimeToStationary: 0.5
 --- !u!1 &6084752666613337163
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,7 +125,6 @@ GameObject:
   - component: {fileID: 7073531685405441624}
   - component: {fileID: 2832921781558130698}
   - component: {fileID: 6038088312813362361}
-  - component: {fileID: 8968741262530748319}
   m_Layer: 0
   m_Name: IMS
   m_TagString: Building
@@ -139,27 +170,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6084752666613337163}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.77, y: 3.15, z: 4.01}
   m_Center: {x: 0, y: 1.56, z: -0.56}
---- !u!208 &8968741262530748319
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6084752666613337163}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.885, y: 1.575, z: 2.005}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 1.56, z: -0.56}
-  m_TimeToStationary: 0.5
 --- !u!1 &7706018586872188095
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,6 +186,8 @@ GameObject:
   - component: {fileID: 8700467900305896658}
   - component: {fileID: 626092455128081584}
   - component: {fileID: 2394692037074896901}
+  - component: {fileID: 5725845215882862861}
+  - component: {fileID: 8730091388689989051}
   m_Layer: 0
   m_Name: IMSPiston
   m_TagString: Untagged
@@ -239,6 +256,36 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &5725845215882862861
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7706018586872188095}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 7828042436829230825, guid: aee8be0cd6ede4e4db6bbadbd5e45a65, type: 3}
+--- !u!208 &8730091388689989051
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7706018586872188095}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1, y: 1, z: 1.325}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0.32500002}
+  m_TimeToStationary: 0.5
 --- !u!1001 &2832921781794298019
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -254,7 +301,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 8015681c4cceb994cb0243beb22657ef,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8015681c4cceb994cb0243beb22657ef,
         type: 3}
