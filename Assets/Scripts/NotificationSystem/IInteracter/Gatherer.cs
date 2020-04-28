@@ -18,15 +18,21 @@ public class Gatherer : MonoBehaviour, IInteracter
     public void OnDestination(RaycastHit hit)
     {
         registeredTarget = hit.collider.gameObject;
-        Debug.Log(gameObject.name + " Gathering");
-        currentTask = Tasks.Gather;
+        Debug.Log(gameObject.name + " is On Destination of Gathering");
+        currentTask = Tasks.Move;
         ExecuteEvents.Execute<Gatherable>(registeredTarget, null, (x, y) => x.OnInteracted(gameObject));
     }
 
-    public void StartGathering(Gatherable target)
+    public void Gathering(Gatherable target)
     {
         ResetResource(target);
+        currentTask = Tasks.Gather;
         StartCoroutine(ResourceTick(target));
+    }
+    
+    public void Queuing(Gatherable target)
+    {
+
     }
 
     IEnumerator ResourceTick(Gatherable target)
@@ -49,4 +55,10 @@ public class Gatherer : MonoBehaviour, IInteracter
         resourceType = target.resourceType;
         resourceHolding = 0;
     }
+
+    public void LookingForResourceNode()
+    {
+        // Cannot queue a resource node, look for another node. if success, quit register the previous one.
+    }
+
 }

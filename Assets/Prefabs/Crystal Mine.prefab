@@ -58,7 +58,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 2, y: 0.825, z: 0.92}
+  m_Extents: {x: 2, y: 0.825, z: 1}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -78,8 +78,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resourceType: 0
   RegisteredGatherers: []
-  currentGatherers: 0
-  maxGatherers: 2
+  GathererQueue: []
+  maxQueue: 2
+  maxGatherers: 1
   maxResource: 500
   currentResource: 500
 --- !u!1 &5198435212372370156

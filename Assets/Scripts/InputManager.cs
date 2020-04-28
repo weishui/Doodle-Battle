@@ -98,7 +98,7 @@ public class InputManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            Debug.Log("Hit: " + hit.collider.ToString());
+            Debug.Log("Mouse Right Click: " + hit.collider.ToString());
             foreach (GameObject o in selectedObjects)
             {
                 if (hit.collider.gameObject.GetComponent<IInteractable>() != null && selectedObjects.Count > 0)
@@ -137,7 +137,11 @@ public class InputManager : MonoBehaviour
     #region MonoBehaviour related
     private void MoveCamera()
     {
-        Camera.main.transform.Translate(movementInput * cameraPanSpeed * Time.deltaTime);
+        //Camera.main.transform.Translate(movementInput * cameraPanSpeed * Time.deltaTime);
+        Vector3 pos = Camera.main.transform.position;
+        pos.x += movementInput.x * cameraPanSpeed * Time.deltaTime;
+        pos.z += movementInput.y * cameraPanSpeed * Time.deltaTime;
+        Camera.main.transform.position = pos;
     }
 
     private void DrawSelectBox()
