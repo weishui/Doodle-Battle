@@ -1,9 +1,29 @@
 fileFormatVersion: 2
-guid: e742123db2b06a64aad47ce3865cf881
+guid: 003a6c3b7e536554ca9b493993663869
 ModelImporter:
   serializedVersion: 19300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Black Blueish Metal
+    second: {fileID: 2100000, guid: d79c65934a821cb48bdb49c06ff3dfb6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Black Painting
+    second: {fileID: 2100000, guid: 045677087565abb4baa031c4ac7074c0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Light Grey Metal
+    second: {fileID: 2100000, guid: d6ab4b1a8584fe642815ef919d600593, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rust Red Paining
+    second: {fileID: 2100000, guid: 9d66b2fc2d5526a4d8191691d078c690, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
