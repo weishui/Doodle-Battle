@@ -7,8 +7,8 @@ using UnityEngine.EventSystems;
 public class Gatherable : MonoBehaviour, IInteractable
 {
     public ResourceType resourceType;
-    public List<GameObject> RegisteredGatherers = new List<GameObject>();
-    public List<GameObject> GathererQueue = new List<GameObject>();
+    public List<GameObject> registeredGatherers = new List<GameObject>();
+    public List<GameObject> gathererQueue = new List<GameObject>();
     public int maxQueue;
     public int maxGatherers;
 
@@ -23,7 +23,8 @@ public class Gatherable : MonoBehaviour, IInteractable
 
     private void Register(GameObject gatherer)
     {
-        RegisteredGatherers.Add(gatherer);
+        if (!registeredGatherers.Contains(gatherer))
+            registeredGatherers.Add(gatherer);
     }
 
     /// <summary>
@@ -35,16 +36,16 @@ public class Gatherable : MonoBehaviour, IInteractable
     private void OnTriggerStay(Collider other)
     {
 
-        if (RegisteredGatherers.Contains(other.gameObject))
+        if (registeredGatherers.Contains(other.gameObject))
         {
             GameObject gatherer = other.gameObject;
-            if (!GathererQueue.Contains(gatherer) && GathererQueue.Count < maxQueue)
+            if (!gathererQueue.Contains(gatherer) && gathererQueue.Count < maxQueue)
             {
                 EnQueue(gatherer);
             }
-            if (GathererQueue.Contains(gatherer))
+            if (gathererQueue.Contains(gatherer))
             {
-                if (GathererQueue.IndexOf(gatherer) < maxGatherers && gatherer.GetComponent<Gatherer>().currentTask != Tasks.Gather)
+                if (gathererQueue.IndexOf(gatherer) < maxGatherers && !gatherer.GetComponent<Gatherer>().isGathering)
                 {
                     ExecuteGathering(gatherer);
                 }
@@ -55,7 +56,19 @@ public class Gatherable : MonoBehaviour, IInteractable
             }
             else
             {
-                ExecuteEvents.Execute<Gatherer>(gatherer, null, (x, y) => x.LookingForResourceNode());                
+                ExecuteEvents.Execute<Gatherer>(gatherer, null, (x, y) => x.FindAlternateResourceNode());                
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (registeredGatherers.Contains(other.gameObject))
+        {
+            GameObject gatherer = other.gameObject;
+            if (gathererQueue.Contains(gatherer))
+            {
+                DeQueue(gatherer);
             }
         }
     }
@@ -63,12 +76,17 @@ public class Gatherable : MonoBehaviour, IInteractable
     private void EnQueue(GameObject gatherer)
     {
         Debug.Log("Adding " + gatherer.name + " to gather queue of " + gameObject.name);
-        GathererQueue.Add(gatherer.gameObject);       
+        gathererQueue.Add(gatherer.gameObject);       
+    }
+    private void DeQueue(GameObject gatherer)
+    {
+        Debug.Log("Removing " + gatherer.name + " to gather queue of " + gameObject.name);
+        gathererQueue.Remove(gatherer.gameObject);       
     }
 
     private void ExecuteGathering(GameObject gatherer)
     {
-        ExecuteEvents.Execute<Gatherer>(gatherer, null, (x, y) => x.Gathering(this));
+        ExecuteEvents.Execute<Gatherer>(gatherer, null, (x, y) => x.Gather(this));
     }
 
     private void ExecuteQueuing(GameObject gatherer)

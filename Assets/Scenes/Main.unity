@@ -435,21 +435,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8981710353225049607, guid: 30cff5ec21944dc45a905bdff48d478c,
-        type: 3}
-      propertyPath: m_Radius
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8981710353225049607, guid: 30cff5ec21944dc45a905bdff48d478c,
-        type: 3}
-      propertyPath: m_Height
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8981710353225049607, guid: 30cff5ec21944dc45a905bdff48d478c,
-        type: 3}
-      propertyPath: m_Center.y
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 8981710353225049658, guid: 30cff5ec21944dc45a905bdff48d478c,
         type: 3}
       propertyPath: m_Name
@@ -630,6 +615,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7600215106920936867, guid: d4391783273263e49a1d91f38d0cd32b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600215106920936867, guid: d4391783273263e49a1d91f38d0cd32b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600215106920936867, guid: d4391783273263e49a1d91f38d0cd32b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7600215106920936867, guid: d4391783273263e49a1d91f38d0cd32b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4391783273263e49a1d91f38d0cd32b, type: 3}
 --- !u!1001 &8692164005737166489
@@ -698,16 +703,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Crystal Mine
-      objectReference: {fileID: 0}
-    - target: {fileID: 7843919429221019022, guid: b7b2f5a6dd4ddde489a02e299887bbfa,
-        type: 3}
-      propertyPath: m_Extents.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7843919429221019022, guid: b7b2f5a6dd4ddde489a02e299887bbfa,
-        type: 3}
-      propertyPath: m_Carve
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7b2f5a6dd4ddde489a02e299887bbfa, type: 3}

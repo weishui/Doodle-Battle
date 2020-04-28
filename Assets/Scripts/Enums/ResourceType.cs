@@ -4,7 +4,9 @@ using UnityEngine;
 
 public enum ResourceType
 {
+    Unknown,
     Crystal,
     Gas,
+
 
 }

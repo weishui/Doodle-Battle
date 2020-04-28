@@ -101,9 +101,16 @@ public class InputManager : MonoBehaviour
             Debug.Log("Mouse Right Click: " + hit.collider.ToString());
             foreach (GameObject o in selectedObjects)
             {
-                if (hit.collider.gameObject.GetComponent<IInteractable>() != null && selectedObjects.Count > 0)
+                GameObject targetObject = hit.collider.gameObject;
+                if (targetObject.GetComponent<IInteractable>() != null && selectedObjects.Count > 0)
                 {
-                    ExecuteEvents.Execute<Interacter>(o, null, (x, y) => x.OnDestination(hit));
+                    if (targetObject.GetComponent<Walkable>() != null)
+                    {
+                        targetObject = new GameObject();
+                        targetObject.transform.position = hit.point;                    
+                    }
+                    ExecuteEvents.Execute<TaskManager>(o, null, (x, y) => x.Register(targetObject));
+
                 }
             }
         }

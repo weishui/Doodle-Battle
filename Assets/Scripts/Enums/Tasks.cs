@@ -8,4 +8,5 @@ public enum Tasks
     Gather,
     Repair,
     Move,
+    Deliver,
 }
